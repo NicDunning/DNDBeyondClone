@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Animated } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import { Tabs } from 'expo-router'
 import React from 'react'
 
