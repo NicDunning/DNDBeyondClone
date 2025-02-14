@@ -1,12 +1,12 @@
-import { View, Text, StyleSheet, } from 'react-native'
+import { View, Text, StyleSheet} from 'react-native'
 import { Tabs } from 'expo-router'
 import React from 'react'
 
 const Profile = () => {
     return (
-        <Animated.View style={styles.container}>
+        <View style={styles.container}>
             
-        </Animated.View>
+        </View>
     )
 }
 
