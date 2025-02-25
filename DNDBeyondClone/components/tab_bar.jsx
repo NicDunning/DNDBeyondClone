@@ -1,23 +1,34 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import {MaterialCommunityIcons} from '@expo/vector-icons';
 import React from 'react'
+import useCharacterContext from '../hooks/useCharacterContext';
+import { use } from 'react';
+import { LoadCharacters } from './character_data';
+
+export let navigationInstance = null;
 
 const TabBar = ({ state, descriptors, navigation}) => {
     const primaryColor = "#0891b2";
     const secondaryColor = "#737373";
+    const {
+        characters,
+        setCharacters
+    } = useCharacterContext()
+    navigationInstance = navigation
 
     const icons = {
         characters: (props) => <MaterialCommunityIcons name="folder-account-outline" size={24} color={secondaryColor} {...props} />,
         explore: (props) => <MaterialCommunityIcons name="magnify" size={24} color={secondaryColor} {...props} />,
         index: (props) => <MaterialCommunityIcons name="home-outline" size={24} color={secondaryColor} {...props} />,
+        sheet: (props) => <MaterialCommunityIcons name="note-outline" size={24} color={secondaryColor} {...props} />,
         profile: (props) => <MaterialCommunityIcons name="face-man-profile" size={24} color={secondaryColor} {...props} />,
     }
 
     return (
         <View style={styles.tabbar}>
         {state.routes.map((route, index) => {
-
             if(["_sitemap", "+not-found"].includes(route.name)) return null
+            if(route.name.includes('sheet_pages')) return null
 
             const { options } = descriptors[route.key];
             const label =
@@ -29,11 +40,14 @@ const TabBar = ({ state, descriptors, navigation}) => {
 
             const isFocused = state.index === index;
 
-            const onPress = () => {
-            const event = navigation.emit({
-                type: 'tabPress',
-                target: route.key,
-                canPreventDefault: true,
+            const onPress = async () => {
+                if(route.key.includes('characters')){
+                    setCharacters(await LoadCharacters())
+                }
+                const event = navigation.emit({
+                    type: 'tabPress',
+                    target: route.key,
+                    canPreventDefault: true,
             });
 
             if (!isFocused && !event.defaultPrevented) {
@@ -84,7 +98,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         marginHorizontal: 20,
         paddingVertical: 15,
-        borderRadius: 25,
+        borderRadius: 2,
         borderCurve: 'continuous',
         shadowColor: 'black',
         shadowOffset: {width: 0, height: 10},
