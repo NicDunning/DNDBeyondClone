@@ -1,8 +1,26 @@
 import { View, Text, StyleSheet } from 'react-native'
 import { Tabs } from 'expo-router'
-import React from 'react'
+import { React, useEffect } from 'react'
+import { LoadCharacters } from '../components/character_data'
+import useCharacterContext from '../hooks/useCharacterContext'
+import { ClearFile } from '../components/file_system'
 
 const Home = () => {
+
+    const {
+        selected,
+        setSelected,
+        characters,
+        setCharacters
+    } = useCharacterContext()
+
+    useEffect(() => {
+        async () => {
+            ClearFile('characters.json')
+            setCharacters(await LoadCharacters())
+        }
+    }, [])
+
     return (
         <View style={styles.container}>
             
